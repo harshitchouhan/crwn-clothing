@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { GoogleAuthProvider, getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { GoogleAuthProvider, getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -31,10 +31,8 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
 
     const userDocRef = doc(db, 'users', userAuth.uid)
 
-    console.log(userDocRef);
     const userSnapshot = await getDoc(userDocRef)
-    console.log(userSnapshot);
-    console.log(userSnapshot.exists());
+
 
     if (!userSnapshot.exists()) {
         const { displayName, email } = userAuth
@@ -66,3 +64,5 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
 
     return await signInWithEmailAndPassword(auth, email, password);
 };
+
+export const signOutUser = async () => await signOut(auth)
